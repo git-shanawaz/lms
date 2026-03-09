@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Library System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('index') }}">Library</a>
+
+    <div class="d-flex ms-auto">
+      {% if session.get('admin') %}
+        <!-- Show Logout button only if logged in -->
+        <a class="btn btn-danger me-2" href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+        <!-- Show Login button if not logged in -->
+        <a class="btn btn-warning me-2" href="{{ url_for('login') }}">Login</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="container mt-3">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="container mt-3 position-relative">
+    {% if request.path == '/login' %}
+    <!-- Login → Guest Home -->
+    <a href="{{ url_for('index') }}" class="back-btn">
+        &lt; Back
+    </a>
+
+{% elif request.path.startswith('/books/add') 
+      or '/edit' in request.path 
+      or '/delete' in request.path %}
+    <!-- Book subpages → Books -->
+    <a href="{{ url_for('books') }}" class="back-btn">
+        &lt; Back
+    </a>
+
+{% elif request.path.startswith('/students/add') 
+      or request.path.startswith('/students/') %}
+    <!-- Student subpages → Students -->
+    <a href="{{ url_for('students') }}" class="back-btn">
+        &lt; Back
+    </a>
+
+{% elif request.path.startswith('/request') %}
+    <!-- Request pages → Guest Home -->
+    <a href="{{ url_for('index') }}" class="back-btn">
+        &lt; Back
+    </a>
+
+{% elif request.path == '/' %}
+    <!-- Guest Home → No Back Button -->
+    
+{% else %}
+    <!-- Everything else → Dashboard -->
+    <a href="{{ url_for('index') }}" class="back-btn">
+        &lt; Back
+    </a>
+{% endif %}
+</div>
+
+<style>
+.back-btn {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 25px;              /* Curvy rectangle */
+    background-color: #ffffff;        /* White background */
+    border: 2px solid #ffc107;        /* Warning outline */
+    color: #ffc107;                   /* Warning text */
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background-color: #ffc107;
+    color: #212529;
+}
+</style>
+
+  {% block content %}
+    {% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

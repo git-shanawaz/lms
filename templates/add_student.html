@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Add Student</h2>
+  <form method="post">
+    <div class="mb-3">
+      <label class="form-label">Name</label>
+      <input name="name" class="form-control" required>
+    </div>
+<div class="mb-3">
+    <label>Class</label>
+<input name="student_class" class="form-control" required>
+</div>
+    <div class="mb-3">
+      <label class="form-label">Roll No</label>
+      <input name="roll_no" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input name="email" type="email" class="form-control">
+    </div>
+    <button class="btn btn-warning ">Add Student</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Transactions</h2>
+  <table class="table">
+    <thead><tr><th>Book</th><th>Student</th><th>Issued At</th><th>Returned At</th></tr></thead>
+    <tbody>
+      {% for t in transactions %}
+      <tr>
+        <td>{{ t.book.title }}</td>
+        <td>{{ t.student.name }} ({{ t.student.roll_no }})</td>
+        <td>{{ t.issue_date.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td>{% if t.return_date %}{{ t.return_date.strftime('%Y-%m-%d %H:%M') }}{% else %}<span class="text-danger">Not returned</span>{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="login-wrapper">
+    <div class="login-card">
+
+        <h2 class="text-center mb-4">Library Login</h2>
+
+        <form method="POST">
+            <div class="mb-3">
+                <input type="text"
+                       name="username"
+                       class="form-control"
+                       placeholder="Username"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <input type="password"
+                       name="password"
+                       class="form-control"
+                       placeholder="Password"
+                       required>
+            </div>
+
+            <button class="btn btn-warning w-100">
+                Log In
+            </button>
+        </form>
+
+    </div>
+</div>
+
+<style>
+/* Full screen center */
+.login-wrapper {
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card */
+.login-card {
+    width: 350px;
+    padding: 40px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+/* Inputs */
+.login-card input {
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Background */
+body {
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+}
+</style>
+
+{% endblock %}

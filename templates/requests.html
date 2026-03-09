@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Book Requests</h2>
+
+{% if requests %}
+<form method="post" action="{{ url_for('requests') }}">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><input type="checkbox" id="select-all"></th>
+        <th>Name</th>
+        <th>Roll No</th>
+        <th>Class</th>
+        <th>Email</th>
+        <th>Book Requested</th>
+        <th>Status</th>
+        <th>Requested At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in requests %}
+      <tr>
+        <td><input type="checkbox" name="request_ids" value="{{ r.id }}"></td>
+        <td>{{ r.name }}</td>
+        <td>{{ r.roll_no }}</td>
+        <td>{{ r.student_class }}</td>
+        <td>{{ r.email }}</td>
+        <td>{{ r.book.title }}</td>
+        <td>{{ r.status }}</td>
+        <td>{{ r.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button class="btn btn-warning">Approve Selected</button>
+</form>
+
+<script>
+document.getElementById('select-all').addEventListener('click', function() {
+  const checkboxes = document.querySelectorAll('input[name="request_ids"]');
+  checkboxes.forEach(cb => cb.checked = this.checked);
+});
+</script>
+
+{% else %}
+<p>No book requests yet.</p>
+{% endif %}
+
+{% endblock %}

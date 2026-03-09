@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if logged_in %}
+
+
+
+<!-- Librarian Dashboard -->
+
+{% block head %}
+<style>
+.btn-dashboard {
+    width: 420px;
+    height: 180px;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-dashboard .count {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.btn-dashboard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+</style>
+{% endblock %}
+
+
+<div class="container mt-5">
+  <div class="row justify-content-center g-4">
+    <!-- Requests -->
+    <div class="col-md-5 d-flex justify-content-center">
+      <a href="{{ url_for('requests') }}" class="btn btn-primary btn-dashboard">
+        Requests<br><span class="count">{{ request_count }}+</span>
+      </a>
+    </div>
+
+    <!-- Books -->
+    <div class="col-md-5 d-flex justify-content-center">
+      <a href="{{ url_for('books') }}" class="btn btn-success btn-dashboard">
+        Books<br><span class="count">{{ book_count }}+</span>
+      </a>
+    </div>
+
+    <!-- Students -->
+    <div class="col-md-5 d-flex justify-content-center">
+      <a href="{{ url_for('students') }}" class="btn btn-warning btn-dashboard">
+        Students<br><span class="count">{{ student_count }}+</span>
+      </a>
+    </div>
+
+    <!-- Issue / Return -->
+    <div class="col-md-5 d-flex justify-content-center">
+      <a href="{{ url_for('issue_return') }}" class="btn btn-info btn-dashboard">
+        Issue / Return<br><span class="count">{{ transaction_count }}+</span>
+      </a>
+    </div>
+
+    <!-- Transactions -->
+    <div class="col-md-5 d-flex justify-content-center">
+      <a href="{{ url_for('transactions') }}" class="btn btn-secondary btn-dashboard">
+        Transactions<br><span class="count">{{ transaction_count }}+</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+    {% else %}
+<!-- Guest / Student view — search & request books -->
+<div class="text-center mt-5">
+    <h1>Library Management System</h1>
+    <p class="lead">Search, Select, and Request Books from the Library</p>
+
+    <!-- Book Search -->
+   <div class="d-flex justify-content-center mb-4">
+
+    <form method="get" class="d-flex" style="width:50%;">
+        <input type="text"
+               name="q"
+               value="{{ q }}"
+               class="form-control me-2"
+               placeholder="Search books...">
+        <button class="btn btn-warning">Search</button>
+    </form>
+
+    <button type="submit"
+            form="requestForm"
+            class="btn btn-warning ms-2">
+        Request Selected
+    </button>
+
+</div>
+
+    {% if books %}
+    <form method="post"
+      action="{{ url_for('request_books') }}"
+      id="requestForm">
+        <div class="row justify-content-center">
+
+            {% for book in books %}
+            <div class="col-md-3 mb-3">
+                <div class="card h-100">
+
+                    {% if book.image_filename %}
+                        <img src="{{ url_for('static', filename='uploads/' + book.image_filename) }}"
+                             class="card-img-top"
+                             style="height:260px; object-fit:contain; background:#ffffff;">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='default_book.png') }}"
+                             class="card-img-top"
+                             style="height:260px; object-fit:contain; background:#ffffff;">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <p class="card-text">Author: {{ book.author }}</p>
+                        <p class="card-text">Available: {{ book.copies_available }}</p>
+
+                        <div class="text-center mt-3">
+    <input type="checkbox"
+           name="book_ids"
+           value="{{ book.id }}"
+           id="book{{ book.id }}"
+           class="btn-check select-toggle">
+
+    <label for="book{{ book.id }}"
+           class="btn btn-warning w-100 select-btn">
+        <span class="btn-text">Select</span>
+    </label>
+</div>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    
+    </form>
+    {% else %}
+        <p>No books found.</p>
+    {% endif %}
+
+</div>
+{% endif %}
+
+<style>
+/* Dashboard buttons */
+.dashboard-btn {
+    width: 150px;
+    height: 120px;
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.count {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 5px;
+    color: #fff;
+}
+
+.btn-primary .count,
+.btn-success .count,
+.btn-warning .count,
+.btn-info .count {
+    color: #fff;
+}
+
+/* Amazon-style Select button */
+.select-btn {
+    font-weight: 600;
+    border-radius: 25px;
+    padding: 8px 0;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+/* Selected state */
+.btn-check:checked + .select-btn {
+    background-color: #28a745 !important;
+    color: white !important;
+    border-color: #28a745 !important;
+}
+
+/* Hover effect */
+.select-btn:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".select-toggle").forEach(function(checkbox) {
+        checkbox.addEventListener("change", function() {
+            const label = document.querySelector("label[for='" + this.id + "']");
+            const text = label.querySelector(".btn-text");
+
+            if (this.checked) {
+                text.innerHTML = "Selected ✓";
+            } else {
+                text.innerHTML = "Select";
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

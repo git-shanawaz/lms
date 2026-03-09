@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Issue / Return</h2>
+
+<!-- Search filters -->
+<form method="get" class="mb-3">
+  <div class="row g-2">
+    <div class="col-md-6">
+      <input type="text" name="book_q" value="{{ book_q }}" class="form-control" placeholder="Search book by title or author">
+    </div>
+    <div class="col-md-6">
+      <input type="text" name="student_q" value="{{ student_q }}" class="form-control" placeholder="Search student by name or roll">
+    </div>
+    <div class="col-md-12 mt-2">
+      <button class="btn btn-warning">Filter</button>
+    </div>
+  </div>
+</form>
+
+<!-- Issue/Return form -->
+<form method="post">
+  <div class="row">
+    <div class="col-md-5 mb-3">
+      <label class="form-label">Book</label>
+      <select name="book_id" class="form-select">
+        {% for b in books %}
+          <option value="{{ b.id }}">{{ b.title }} — Available: {{ b.copies_available }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-5 mb-3">
+      <label class="form-label">Student</label>
+      <select name="student_id" class="form-select">
+        {% for s in students %}
+          <option value="{{ s.id }}">{{ s.name }} ({{ s.roll_no }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2 d-flex align-items-end mb-3">
+      <select name="action" class="form-select me-2">
+        <option value="issue">Issue</option>
+        <option value="return">Return</option>
+      </select>
+      <button class="btn btn-warning">Go</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

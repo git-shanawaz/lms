@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Edit Book</h2>
+
+  <form method="POST" enctype="multipart/form-data"></form>
+
+  <form method="post">
+    <div class="mb-3">
+      <label class="form-label">Title</label>
+      <input name="title" class="form-control" value="{{ book.title }}" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Author</label>
+      <input name="author" class="form-control" value="{{ book.author }}" required>
+    </div>
+    <div class="mb-3">
+  <label class="form-label">Change Book Image</label>
+  <input type="file" name="image" class="form-control" accept="image/*">
+   </div>
+    <div class="mb-3">
+      <label class="form-label">ISBN</label>
+      <input name="isbn" class="form-control" value="{{ book.isbn or '' }}">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Total Copies</label>
+      <input name="copies" type="number" class="form-control" value="{{ book.copies_total }}">
+    </div>
+    <button class="btn btn-warning">Save</button>
+  </form>
+{% endblock %}
